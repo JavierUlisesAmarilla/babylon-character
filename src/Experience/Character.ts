@@ -1,6 +1,7 @@
 import * as BABYLON from 'babylonjs'
 import 'babylonjs-loaders'
 import { getYLookQuat } from '../utils/common'
+import { IS_WIREFRAME_VISIBLE } from '../utils/constants'
 import { Experience } from './Experience'
 
 export class Character {
@@ -24,6 +25,7 @@ export class Character {
     console.log('test: bodyModel:', bodyModel)
     const bodyMaterial = new BABYLON.StandardMaterial('BodyMaterial', this.experience.scene)
     bodyMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0)
+    bodyMaterial.wireframe = IS_WIREFRAME_VISIBLE
 
     bodyModel.meshes.forEach(mesh => {
       mesh.parent = this.root
@@ -38,6 +40,9 @@ export class Character {
     headModel.meshes.forEach(mesh => {
       mesh.parent = this.root
       mesh.isPickable = false
+      if (mesh.material) {
+        mesh.material.wireframe = IS_WIREFRAME_VISIBLE
+      }
     })
   }
 }
