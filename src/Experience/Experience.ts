@@ -23,7 +23,8 @@ export class Experience {
     this.canvas = canvas
     this.engine = new BABYLON.Engine(this.canvas, true)
     this.scene = new BABYLON.Scene(this.engine)
-    this.camera = new BABYLON.ArcRotateCamera('ArcRotateCamera', -0.5 * Math.PI, 0.5 * Math.PI, 5, new BABYLON.Vector3(0, 0, 0))
+    this.camera = new BABYLON.ArcRotateCamera('ArcRotateCamera', -0.5 * Math.PI, 0.5 * Math.PI, 3, new BABYLON.Vector3(0, 0, 0))
+    this.camera.wheelPrecision = 100
     this.camera.attachControl(this.canvas, true)
     this.camera.target = new BABYLON.Vector3(0, 0, 0)
     this.hemisphericLight = new BABYLON.HemisphericLight('HemisphericLight', new BABYLON.Vector3(-1, 0, 0), this.scene)
@@ -40,7 +41,7 @@ export class Experience {
     this.character = new Character()
 
     // Utils
-    new BABYLON.Debug.AxesViewer(this.scene, 1)
+    // new BABYLON.Debug.AxesViewer(this.scene, 1)
   }
 
   update() {

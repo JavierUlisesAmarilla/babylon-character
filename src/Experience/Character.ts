@@ -21,17 +21,19 @@ export class Character {
 
     // Body
     const bodyModel = await BABYLON.SceneLoader.ImportMeshAsync('', '/assets/models/', 'female_body.glb', this.experience.scene)
+    console.log('test: bodyModel:', bodyModel)
     const bodyMaterial = new BABYLON.StandardMaterial('BodyMaterial', this.experience.scene)
     bodyMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0)
 
     bodyModel.meshes.forEach(mesh => {
       mesh.parent = this.root
       mesh.isPickable = false
-      mesh.material = bodyMaterial
+      mesh.material = bodyMaterial // Make body black.
     })
 
     // Head
     const headModel = await BABYLON.SceneLoader.ImportMeshAsync('', '/assets/models/', 'female_head.glb', this.experience.scene)
+    console.log('test: headModel:', headModel)
 
     headModel.meshes.forEach(mesh => {
       mesh.parent = this.root
