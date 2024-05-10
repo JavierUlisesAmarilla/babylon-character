@@ -24,7 +24,6 @@ export class Character {
     const bodyRoot = new BABYLON.TransformNode(this.name)
     bodyRoot.parent = this.root
     const bodyModel = await BABYLON.SceneLoader.ImportMeshAsync('', '/assets/models/', 'female_body.glb', this.experience.scene)
-    console.log('test: bodyModel:', bodyModel)
     const bodyMaterial = new BABYLON.StandardMaterial('BodyMaterial', this.experience.scene)
     bodyMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0)
     bodyMaterial.wireframe = IS_WIREFRAME_VISIBLE
@@ -39,7 +38,6 @@ export class Character {
     const headRoot = new BABYLON.TransformNode(this.name)
     headRoot.parent = this.root
     const headModel = await BABYLON.SceneLoader.ImportMeshAsync('', '/assets/models/', 'female_head.glb', this.experience.scene)
-    console.log('test: headModel:', headModel)
 
     headModel.meshes.forEach(mesh => {
       mesh.parent = headRoot
@@ -49,7 +47,7 @@ export class Character {
       }
     })
 
-    // Calculate offset.
+    // Calculate head offset.
     const bodyVertexIndex = 5162
     const headVertexIndex = 12338
     const bodyMesh = this.experience.scene.getMeshByName('body')
@@ -60,8 +58,12 @@ export class Character {
       const bodyVertex = bodyVertexPositions?.slice(bodyVertexIndex * 3, (bodyVertexIndex + 1) * 3)
       const headVertexPositions = headMesh.getVerticesData(BABYLON.VertexBuffer.PositionKind)
       const headVertex = headVertexPositions?.slice(headVertexIndex * 3, (headVertexIndex + 1) * 3)
-      console.log('test: headVertex:', headVertex)
-      console.log('test: bodyVertex:', bodyVertex)
+
+      if (bodyVertex && headVertex) {
+        headRoot.position.x += bodyVertex[0] - headVertex[0]
+        headRoot.position.y += bodyVertex[1] - headVertex[1]
+        headRoot.position.z += bodyVertex[2] - headVertex[2]
+      }
     }
   }
 }

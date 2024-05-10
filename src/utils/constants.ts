@@ -1,1 +1,1 @@
-export const IS_WIREFRAME_VISIBLE = true
+export const IS_WIREFRAME_VISIBLE = false
