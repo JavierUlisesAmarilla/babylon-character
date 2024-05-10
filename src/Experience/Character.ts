@@ -54,9 +54,16 @@ export class Character {
       }
     })
 
-    // Calculate head offset.
+    /**
+     * Once we consider that vertices index of head and body will remain constant,
+     * just only need to find indices of both vertices which are matched each other from head and body mesh using blender,
+     * as you can see in the following video.
+     * https://drive.google.com/file/d/1vjhVLOmzvlGzOsbLvkmNNNKP5C_lSAoD/view?usp=sharing
+     */
     const bodyVertexIndex = 5162
     const headVertexIndex = 12338
+
+    // Calculate head offset.
     const bodyMesh = this.experience.scene.getMeshByName('body')
     const headMesh = this.experience.scene.getMeshByName('mesh')
 
@@ -73,7 +80,7 @@ export class Character {
       }
     }
 
-    // Find neck node.
+    // Find head node.
     const headSkeleton = headModel.skeletons[0]
     this.headNode = headSkeleton.bones[headSkeleton.getBoneIndexByName('Head')].getTransformNode()
   }
