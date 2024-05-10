@@ -12,7 +12,7 @@ export class Highlight extends EventEmitter {
 
     this.experience = new Experience()
     this.scene = this.experience.scene
-    this.highlightLayer = new BABYLON.HighlightLayer('highlight', this.scene)
+    this.highlightLayer = new BABYLON.HighlightLayer('HighlightLayer', this.scene)
   }
 
   addMeshes(meshes: BABYLON.Mesh[], color: BABYLON.Color3) {

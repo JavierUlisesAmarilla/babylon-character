@@ -7,13 +7,10 @@ export class Character {
   name = 'character'
   experience
   root
-  rootChild
 
   constructor() {
     this.experience = new Experience()
     this.root = new BABYLON.TransformNode(this.name)
-    this.rootChild = new BABYLON.TransformNode(this.name)
-    this.rootChild.parent = this.root
     this.init()
   }
 
@@ -23,15 +20,22 @@ export class Character {
     this.root.rotationQuaternion = getYLookQuat(this.root.position, new BABYLON.Vector3(0, -1, 0))
 
     // Body
-    await BABYLON.SceneLoader.ImportMeshAsync('', '/assets/models/', 'female_body.glb', this.experience.scene)
-    const bodyMesh = this.experience.scene.getMeshByName('body')
+    const bodyModel = await BABYLON.SceneLoader.ImportMeshAsync('', '/assets/models/', 'female_body.glb', this.experience.scene)
+    const bodyMaterial = new BABYLON.StandardMaterial('BodyMaterial', this.experience.scene)
+    bodyMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0)
 
-    if (bodyMesh) {
-      bodyMesh.parent = this.rootChild
-      bodyMesh.isPickable = false
-      const material = new BABYLON.StandardMaterial('material', this.experience.scene)
-      material.diffuseColor = new BABYLON.Color3(0, 0, 0)
-      bodyMesh.material = material
-    }
+    bodyModel.meshes.forEach(mesh => {
+      mesh.parent = this.root
+      mesh.isPickable = false
+      mesh.material = bodyMaterial
+    })
+
+    // Head
+    const headModel = await BABYLON.SceneLoader.ImportMeshAsync('', '/assets/models/', 'female_head.glb', this.experience.scene)
+
+    headModel.meshes.forEach(mesh => {
+      mesh.parent = this.root
+      mesh.isPickable = false
+    })
   }
 }
