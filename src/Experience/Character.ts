@@ -16,11 +16,13 @@ export class Character {
   }
 
   async init() {
-    // Root
+    // Update root transformation.
     this.root.position.set(0, -1, 0.1)
     this.root.rotationQuaternion = getYLookQuat(this.root.position, new BABYLON.Vector3(0, -1, 0))
 
-    // Body
+    // Load body model.
+    const bodyRoot = new BABYLON.TransformNode(this.name)
+    bodyRoot.parent = this.root
     const bodyModel = await BABYLON.SceneLoader.ImportMeshAsync('', '/assets/models/', 'female_body.glb', this.experience.scene)
     console.log('test: bodyModel:', bodyModel)
     const bodyMaterial = new BABYLON.StandardMaterial('BodyMaterial', this.experience.scene)
@@ -28,21 +30,38 @@ export class Character {
     bodyMaterial.wireframe = IS_WIREFRAME_VISIBLE
 
     bodyModel.meshes.forEach(mesh => {
-      mesh.parent = this.root
+      mesh.parent = bodyRoot
       mesh.isPickable = false
       mesh.material = bodyMaterial // Make body black.
     })
 
-    // Head
+    // Load head model.
+    const headRoot = new BABYLON.TransformNode(this.name)
+    headRoot.parent = this.root
     const headModel = await BABYLON.SceneLoader.ImportMeshAsync('', '/assets/models/', 'female_head.glb', this.experience.scene)
     console.log('test: headModel:', headModel)
 
     headModel.meshes.forEach(mesh => {
-      mesh.parent = this.root
+      mesh.parent = headRoot
       mesh.isPickable = false
       if (mesh.material) {
         mesh.material.wireframe = IS_WIREFRAME_VISIBLE
       }
     })
+
+    // Calculate offset.
+    const bodyVertexIndex = 5162
+    const headVertexIndex = 12338
+    const bodyMesh = this.experience.scene.getMeshByName('body')
+    const headMesh = this.experience.scene.getMeshByName('mesh')
+
+    if (bodyMesh && headMesh) {
+      const bodyVertexPositions = bodyMesh.getVerticesData(BABYLON.VertexBuffer.PositionKind)
+      const bodyVertex = bodyVertexPositions?.slice(bodyVertexIndex * 3, (bodyVertexIndex + 1) * 3)
+      const headVertexPositions = headMesh.getVerticesData(BABYLON.VertexBuffer.PositionKind)
+      const headVertex = headVertexPositions?.slice(headVertexIndex * 3, (headVertexIndex + 1) * 3)
+      console.log('test: headVertex:', headVertex)
+      console.log('test: bodyVertex:', bodyVertex)
+    }
   }
 }
