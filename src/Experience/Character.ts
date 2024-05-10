@@ -10,11 +10,15 @@ export class Character {
   name = 'character'
   experience
   root
+  headYRot: number
+  headYRotSpeed: number
   headNode!: BABYLON.Nullable<BABYLON.TransformNode>
 
   constructor() {
     this.experience = new Experience()
     this.root = new BABYLON.TransformNode(this.name)
+    this.headYRot = 0
+    this.headYRotSpeed = 0.01
     this.init()
   }
 
@@ -76,8 +80,12 @@ export class Character {
 
   update() {
     // Animate head.
+    this.headYRot += this.headYRotSpeed
+    if (this.headYRot > headYRotLimitInRadians || this.headYRot < -headYRotLimitInRadians) {
+      this.headYRotSpeed = -this.headYRotSpeed
+    }
     if (this.headNode) {
-      this.headNode.rotationQuaternion = BABYLON.Quaternion.RotationAxis(BABYLON.Axis.Y, headYRotLimitInRadians)
+      this.headNode.rotationQuaternion = BABYLON.Quaternion.RotationAxis(BABYLON.Axis.Y, this.headYRot)
     }
   }
 }
