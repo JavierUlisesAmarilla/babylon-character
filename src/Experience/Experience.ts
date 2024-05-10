@@ -47,6 +47,7 @@ export class Experience {
 
   update() {
     this.scene?.render()
+    this.character.update()
   }
 
   resize() {

@@ -4,10 +4,13 @@ import { getYLookQuat } from '../utils/common'
 import { IS_WIREFRAME_VISIBLE } from '../utils/constants'
 import { Experience } from './Experience'
 
+const headYRotLimitInRadians = Math.PI / 4
+
 export class Character {
   name = 'character'
   experience
   root
+  headNode!: BABYLON.Nullable<BABYLON.TransformNode>
 
   constructor() {
     this.experience = new Experience()
@@ -64,6 +67,17 @@ export class Character {
         headRoot.position.y += bodyVertex[1] - headVertex[1]
         headRoot.position.z += bodyVertex[2] - headVertex[2]
       }
+    }
+
+    // Find neck node.
+    const headSkeleton = headModel.skeletons[0]
+    this.headNode = headSkeleton.bones[headSkeleton.getBoneIndexByName('Head')].getTransformNode()
+  }
+
+  update() {
+    // Animate head.
+    if (this.headNode) {
+      this.headNode.rotationQuaternion = BABYLON.Quaternion.RotationAxis(BABYLON.Axis.Y, headYRotLimitInRadians)
     }
   }
 }
